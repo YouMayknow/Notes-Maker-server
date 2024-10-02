@@ -1,5 +1,6 @@
 package com.example
 
+import com.example.model.fakeUseRepository
 import com.example.plugins.*
 import io.ktor.server.application.*
 
@@ -12,6 +13,5 @@ fun Application.module() {
     configureDatabases()
     configureMonitoring()
     configureSecurity()
-    configureRouting()
+    configureRouting(userRepository = fakeUseRepository())
 }
-//just refining
