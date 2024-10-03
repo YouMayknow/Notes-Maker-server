@@ -1,7 +1,10 @@
-package com.example.model
+package com.example.repository
 
 import at.favre.lib.crypto.bcrypt.BCrypt
-import com.example.database.UserDataTable.username
+import com.example.model.Note
+import com.example.model.NoteCreate
+import com.example.model.NoteUpdate
+import com.example.model.UserData
 import io.ktor.server.plugins.*
 import java.util.concurrent.ConcurrentHashMap
 
@@ -26,11 +29,15 @@ class fakeUseRepository : UserRepository {
         return verify
     }
 
-    override suspend fun saveUserData(username: String): Boolean {
+    override suspend fun saveUserData(username: String, note: NoteCreate) {
         TODO("Not yet implemented")
     }
 
-    override suspend fun getUserData(username: String): String {
+    override suspend fun getUserData(username: String): List<Note> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun getUserDataWithId(noteId: Int): Note {
         TODO("Not yet implemented")
     }
 
@@ -40,5 +47,10 @@ class fakeUseRepository : UserRepository {
 
     override suspend fun getUserDataWithLastUpdated(username: String): String {
         TODO("Not yet implemented")
+    }
+
+    override suspend fun updateUserData(note: NoteUpdate, noteId: Int) {
+
+
     }
 }

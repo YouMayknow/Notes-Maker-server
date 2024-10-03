@@ -1,11 +1,11 @@
 package com.example.plugins
 
 import com.example.auth.configureJWT
+import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.server.auth.jwt.*
-import io.ktor.server.routing.*
-import java.nio.file.Paths.get
+import io.ktor.server.response.*
 
 fun Application.configureSecurity() {
     install(Authentication){
@@ -16,6 +16,9 @@ fun Application.configureSecurity() {
                if (jwtCredential.payload.getClaim("username").asString() != null){
                    JWTPrincipal(jwtCredential.payload)
                } else null
+           }
+           challenge{_,_ ->
+               call.respond(HttpStatusCode.Unauthorized , "User is not verified")
            }
        }
     }

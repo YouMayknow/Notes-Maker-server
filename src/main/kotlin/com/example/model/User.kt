@@ -10,11 +10,3 @@ data class UserData(
     val dateCreated: String = ""
 )
 
-@Serializable
-data class Note (
-    val username : String,
-    val heading : String,
-    val lastCrated : String ,
-    val content : String ,
-    val dateCreated : String ,
-)

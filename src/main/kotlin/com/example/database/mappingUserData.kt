@@ -12,10 +12,10 @@ import org.jetbrains.exposed.sql.javatime.datetime
 import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
 
 object UserDataTable : IntIdTable(name = "userData") {
-    val username =  varchar("username" , 50).index()
-    val password = varchar("password", 200)
-    val email = varchar("email", 50)
-    val dateCreated = datetime("date_created").defaultExpression(CurrentDateTime)
+    var username =  varchar("username" , 50).index()
+    var password = varchar("password", 200)
+    var email = varchar("email", 50)
+    var dateCreated = datetime("date_created").defaultExpression(CurrentDateTime)
 }
 class UserDataDao(id:EntityID<Int>) : IntEntity(id) {
     companion object : IntEntityClass<UserDataDao>(UserDataTable)
