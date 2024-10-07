@@ -13,5 +13,5 @@ fun Application.module() {
     configureDatabases()
     configureMonitoring()
     configureSecurity()
-    configureRouting(userRepository = fakeUseRepository())
+    configureRouting()
 }

@@ -1,7 +1,7 @@
 package com.example.auth
 
 import com.example.model.UserData
-import com.example.model.UserRepository
+import com.example.repository.UserRepository
 import io.ktor.http.*
 import io.ktor.server.plugins.*
 import io.ktor.server.request.*
