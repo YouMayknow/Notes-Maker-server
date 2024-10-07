@@ -16,8 +16,6 @@ object UserNotesTable : IntIdTable(name = "user_notes_table") {
     var dateCreated = datetime("date_created").defaultExpression(CurrentDateTime)
     var lastUpdate = datetime("last_updated").defaultExpression(CurrentDateTime)
 }
-
-
 class UserNotesDao (id : EntityID<Int>) : IntEntity(id = id){
     companion object : IntEntityClass<UserNotesDao>(UserNotesTable)
 

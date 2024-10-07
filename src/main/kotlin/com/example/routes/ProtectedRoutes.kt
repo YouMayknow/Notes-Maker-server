@@ -68,5 +68,8 @@ fun Route.protectedRoutes(
                 call.respond(HttpStatusCode.NotFound, e.message.toString())
             }
         }
+        get("/token/verifier"){
+            call.respond(HttpStatusCode.OK , "Token is verifier as it pass the verification")
+        }
     }
 }
