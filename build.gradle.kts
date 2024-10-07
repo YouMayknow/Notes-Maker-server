@@ -36,4 +36,14 @@ dependencies {
     implementation(libs.logback.classic)
     testImplementation(libs.ktor.server.test.host)
     testImplementation(libs.kotlin.test.junit)
+
+    // exposed dao for database itegtion
+    implementation(libs.exposed.dao)
+
+    // hashing with Bcrypt
+    implementation("at.favre.lib:bcrypt:0.9.0") // Check for the latest version
+
+
+    // for time recording
+    implementation("org.jetbrains.exposed:exposed-java-time:0.53.0")
 }
