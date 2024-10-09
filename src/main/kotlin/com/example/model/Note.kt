@@ -15,7 +15,8 @@ data class Note(
 @Serializable
 data class  NoteUpdate(
     val content: String? = null,
-    val heading : String? = null
+    val heading : String? = null ,
+    val id : Int
 )
 
 @Serializable

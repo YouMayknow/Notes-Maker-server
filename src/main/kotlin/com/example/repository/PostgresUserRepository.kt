@@ -81,8 +81,8 @@ class PostgresUserRepository : UserRepository {
         TODO("Not yet implemented")
     }
 
-    override suspend fun updateUserData(note: NoteUpdate, noteId: Int) : Unit = suspendTransaction {
-     val selectedNote =  UserNotesDao.findById(noteId) ?: throw NotFoundException("Note with ID $noteId not found") // Handle the case where the note is not found
+    override suspend fun updateUserData(note: NoteUpdate) : Unit = suspendTransaction {
+     val selectedNote =  UserNotesDao.findById(note.id) ?: throw NotFoundException("Note with ID ${note.id} not found") // Handle the case where the note is not found
         selectedNote.apply {
             if (note.content != null && note.heading != null ){
                 note.content.also { content = it }
@@ -98,5 +98,23 @@ class PostgresUserRepository : UserRepository {
             }
               // Assuming you have an 'updatedAt' field
         }
+    }
+
+    /*
+    here it verifies the username and note id belongs to the same person so and after matching tha credentials
+    it allows the function to delete the note
+     */
+    override suspend fun deleteUserData(noteId: Int, username: String) : Unit  = suspendTransaction {
+      val userNote  =   UserNotesDao.find {
+         ( UserNotesTable.notesUsername eq username) and (UserNotesTable.id  eq noteId)
+      }
+        if (userNote.empty()){
+            throw IllegalAccessException("Manipulated access requested! , Denied")
+        }
+        else {
+          val note =   UserNotesDao.findById(noteId)
+            note?.delete()
+        }
+
     }
 }

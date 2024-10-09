@@ -13,6 +13,7 @@ interface UserRepository {
  suspend fun getUserDataWithId(noteId: Int) : Note
     suspend  fun getUserDataWithDateCreated(username: String) : String
      suspend fun getUserDataWithLastUpdated(username: String) : String
-     suspend fun  updateUserData(note: NoteUpdate, noteId : Int)
+     suspend fun  updateUserData(note: NoteUpdate)
+     suspend fun deleteUserData(noteId : Int , username: String )
 }
 

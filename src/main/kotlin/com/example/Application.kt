@@ -1,6 +1,5 @@
 package com.example
 
-import com.example.model.fakeUseRepository
 import com.example.plugins.*
 import io.ktor.server.application.*
 

@@ -49,8 +49,12 @@ class fakeUseRepository : UserRepository {
         TODO("Not yet implemented")
     }
 
-    override suspend fun updateUserData(note: NoteUpdate, noteId: Int) {
-
-
+    override suspend fun updateUserData(note: NoteUpdate) {
+        TODO("Not yet implemented")
     }
+
+    override suspend fun deleteUserData(noteId: Int, username: String) {
+        TODO("Not yet implemented")
+    }
+
 }
