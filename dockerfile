@@ -14,4 +14,4 @@ RUN ./gradlew installDist
 EXPOSE 8080
 
 # Run the app
-CMD ["./build/install/your-app-name/bin/your-app-name"]
+CMD ["./build/install/limit-life/bin/limit-life"]
