@@ -8,7 +8,9 @@ import com.example.model.NoteUpdate
 import com.example.model.UserData
 import com.sun.jdi.request.DuplicateRequestException
 import io.ktor.server.plugins.*
+import org.jetbrains.exposed.sql.SortOrder
 import org.jetbrains.exposed.sql.and
+import java.time.LocalDateTime
 
 class PostgresUserRepository : UserRepository {
     override suspend fun registerUser(userData: UserData) : Unit  = suspendTransaction {
@@ -60,11 +62,14 @@ class PostgresUserRepository : UserRepository {
 
     override  suspend fun getUserData(username: String): List<Note> = suspendTransaction {
       val userdata =   UserNotesDao.find { UserNotesTable.notesUsername eq username}
-          if (userdata.count() == 0L){
+          .orderBy(UserNotesTable.lastUpdate to SortOrder.DESC)
+
+        if (userdata.count() == 0L){
               throw NotFoundException("No Notes are created by the user")
           }
         else {
-        userdata.map(::daoToModelForNotes)
+        userdata
+            .map(::daoToModelForNotes)
         }
     }
 
@@ -85,6 +90,7 @@ class PostgresUserRepository : UserRepository {
      val selectedNote =  UserNotesDao.findById(note.id) ?: throw NotFoundException("Note with ID ${note.id} not found") // Handle the case where the note is not found
         selectedNote.apply {
             if (note.content != null && note.heading != null ){
+                 lastUpdate  = LocalDateTime.now()
                 note.content.also { content = it }
                 note.heading.also { heading = it }
             }
@@ -99,7 +105,6 @@ class PostgresUserRepository : UserRepository {
               // Assuming you have an 'updatedAt' field
         }
     }
-
     /*
     here it verifies the username and note id belongs to the same person so and after matching tha credentials
     it allows the function to delete the note
