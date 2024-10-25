@@ -1,17 +1,17 @@
-# Use an official openjdk runtime as a parent image
-FROM openjdk:17-jdk-slim
-
-# Set the working directory inside the container
+# Set working directory
 WORKDIR /app
 
-# Copy the entire project to the working directory
+# Copy all files
 COPY . .
 
-# Build the application
+# Ensure gradlew is executable
+RUN chmod +x ./gradlew
+
+# Install distribution (build the app)
 RUN ./gradlew installDist
 
-# Expose the port that Ktor will run on (Render will bind the port automatically)
+# Define the port your application will run on
 EXPOSE 8080
 
-# Define the command to run the application
-CMD ["./build/install/limit-life/bin/your-app-name"]
+# Run the app
+CMD ["./build/install/your-app-name/bin/your-app-name"]

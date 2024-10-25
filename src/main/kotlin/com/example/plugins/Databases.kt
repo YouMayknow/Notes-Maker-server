@@ -10,16 +10,29 @@ import kotlinx.coroutines.*
 import org.jetbrains.exposed.sql.*
 
 fun Application.configureDatabases() {
+    val databaseUrl = System.getenv("DATABASE_URL") ?: "jdbc:postgresql://localhost:5432/limit_life_database"
+    val dbUser = System.getenv("DB_USER") ?: "postgres"
+    val dbPassword = System.getenv("DB_PASSWORD") ?: "@Coder123."
 
     val database = Database.connect(
-        url = "jdbc:postgresql://localhost:5432/limit_life_database",
-        user = "postgres",
-      //  driver = "org.h2.Driver",
-        password = "@Coder123.",
+        url = databaseUrl,
+        user = dbUser,
+        password = dbPassword,
     )
+
     val dbConnection: Connection = connectToPostgres(embedded = true)
     val cityService = CityService(dbConnection)
-    
+//fun Application.configureDatabases() {
+//
+//    val database = Database.connect(
+//        url = "jdbc:postgresql://localhost:5432/limit_life_database",
+//        user = "postgres",
+//      //  driver = "org.h2.Driver",
+//        password = "@Coder123.",
+//    )
+//    val dbConnection: Connection = connectToPostgres(embedded = true)
+//    val cityService = CityService(dbConnection)
+//
 //    routing {
 //
 //        // Create city
