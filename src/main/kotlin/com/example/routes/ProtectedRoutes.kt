@@ -20,11 +20,12 @@ fun Route.protectedRoutes(
             val principal = call.principal<JWTPrincipal>()
             val username = principal!!.payload.getClaim("username").asString()
             try {
-                userRepository.saveUserData(username,notes)
+              val noteId =   userRepository.saveUserData(username,notes)
+                call.respond(HttpStatusCode.OK , mapOf("noteId" to noteId))
+
             } catch (e : Exception){
                 call.respond(HttpStatusCode.BadRequest ,e.message.toString())
             }
-            call.respond(HttpStatusCode.OK , "i $username, had gotten the data that i was demanding with header = ${notes.heading} ")
         }
 
         patch("/notes/update") {

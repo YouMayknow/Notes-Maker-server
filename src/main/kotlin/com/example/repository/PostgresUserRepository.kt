@@ -40,7 +40,7 @@ class PostgresUserRepository : UserRepository {
         return@suspendTransaction verify
     }
 
-    override suspend fun saveUserData(username: String, note: NoteCreate) : Unit  = suspendTransaction{
+    override suspend fun saveUserData(username: String, note: NoteCreate): Int = suspendTransaction{
         if (note.content.isBlank() || note.heading.isBlank()){
             throw IllegalArgumentException (
                 "Heading or content cannot be null"
@@ -58,6 +58,8 @@ class PostgresUserRepository : UserRepository {
             heading = note.heading
             content  =note.content
         }
+        val noteId : Int = UserNotesDao.find {( UserNotesTable.heading eq note.heading ) and (UserNotesTable.notesUsername eq username) }.first().id.value
+        return@suspendTransaction noteId
     }
 
     override  suspend fun getUserData(username: String): List<Note> = suspendTransaction {

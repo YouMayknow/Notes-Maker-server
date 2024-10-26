@@ -25,7 +25,7 @@ class fakeUserRepository : UserRepository {
         val verify = BCrypt.verifyer().verify(userData.password.toCharArray() , hashedPassword ).verified
         return verify
     }
-    override suspend fun saveUserData(username: String, note: NoteCreate) {
+    override suspend fun saveUserData(username: String, note: NoteCreate): Int {
         TODO("Not yet implemented")
     }
     override suspend fun getUserData(username: String): List<Note> {
