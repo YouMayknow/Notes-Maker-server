@@ -4,12 +4,13 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class Note(
-    val id : Int  ,
-    val username : String?,
+    val id : Int? = null,
+    val username : String? = null,
     val heading : String?,
-    val lastCreated : String? = "" ,
-    val content : String? ,
-    val dateCreated : String? = ""
+    val lastUpdated : String? = null,
+    val content : String?,
+    val dateCreated : String? = null,
+    val version : Int = 1
 )
 
 @Serializable
@@ -23,4 +24,5 @@ data class  NoteUpdate(
 data class  NoteCreate(
     val heading: String ,
     val content : String ,
+
 )

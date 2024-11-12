@@ -3,8 +3,6 @@ package com.example.repository
 import at.favre.lib.crypto.bcrypt.BCrypt
 import com.example.database.*
 import com.example.model.Note
-import com.example.model.NoteCreate
-import com.example.model.NoteUpdate
 import com.example.model.UserData
 import com.sun.jdi.request.DuplicateRequestException
 import io.ktor.server.plugins.*
@@ -40,8 +38,8 @@ class PostgresUserRepository : UserRepository {
         return@suspendTransaction verify
     }
 
-    override suspend fun saveUserData(username: String, note: NoteCreate): Int = suspendTransaction{
-        if (note.content.isBlank() || note.heading.isBlank()){
+    override suspend fun createUserNote(username: String, note: Note): Int = suspendTransaction{
+        if (note.content.isNullOrBlank() || note.heading.isNullOrBlank()){
             throw IllegalArgumentException (
                 "Heading or content cannot be null"
             )
@@ -57,12 +55,15 @@ class PostgresUserRepository : UserRepository {
             notesUsername  = username
             heading = note.heading
             content  =note.content
+            dateCreated = note.dateCreated ?: LocalDateTime.now().toString()
+            lastUpdate = note.lastUpdated ?: LocalDateTime.now().toString()
+            version = note.version
         }
         val noteId : Int = UserNotesDao.find {( UserNotesTable.heading eq note.heading ) and (UserNotesTable.notesUsername eq username) }.first().id.value
         return@suspendTransaction noteId
     }
 
-    override  suspend fun getUserData(username: String): List<Note> = suspendTransaction {
+    override  suspend fun getUserNote(username: String): List<Note> = suspendTransaction {
       val userdata =   UserNotesDao.find { UserNotesTable.notesUsername eq username}
           .orderBy(UserNotesTable.lastUpdate to SortOrder.DESC)
 
@@ -88,18 +89,26 @@ class PostgresUserRepository : UserRepository {
         TODO("Not yet implemented")
     }
 
-    override suspend fun updateUserData(note: NoteUpdate) : Unit = suspendTransaction {
+    override suspend fun updateUserData(note: Note) : Unit = suspendTransaction {
+        if (note.id == null){
+            throw IllegalArgumentException("Note ID cannot be null")
+        }
      val selectedNote =  UserNotesDao.findById(note.id) ?: throw NotFoundException("Note with ID ${note.id} not found") // Handle the case where the note is not found
         selectedNote.apply {
             if (note.content != null && note.heading != null ){
-                 lastUpdate  = LocalDateTime.now()
+                version += 1
+                 lastUpdate = note.lastUpdated ?: LocalDateTime.now().toString()
                 note.content.also { content = it }
                 note.heading.also { heading = it }
             }
             else if (note.heading != null){
+                version += 1
+                lastUpdate.also { lastUpdate = it }
                 note.heading.also { heading = it }
             }
             else if(note.content != null) {
+                lastUpdate.also { lastUpdate = it }
+                version += 1
                 note.content.also { content = it }
             } else {
                 throw NullPointerException("No changes have made")

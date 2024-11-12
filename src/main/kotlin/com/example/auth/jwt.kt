@@ -11,8 +11,6 @@ object JwtConfig {
     private const val validInHours = 36_00_000*60
     private const val issuer = "myapp"
     private val algorithm = Algorithm.HMAC256(secretKey)
-
-
     fun generateToken (username : String): String =
         JWT.create()
             .withIssuer(issuer)

@@ -2,8 +2,6 @@ package com.example.repository
 
 import at.favre.lib.crypto.bcrypt.BCrypt
 import com.example.model.Note
-import com.example.model.NoteCreate
-import com.example.model.NoteUpdate
 import com.example.model.UserData
 import io.ktor.server.plugins.*
 import java.util.concurrent.ConcurrentHashMap
@@ -25,10 +23,10 @@ class fakeUserRepository : UserRepository {
         val verify = BCrypt.verifyer().verify(userData.password.toCharArray() , hashedPassword ).verified
         return verify
     }
-    override suspend fun saveUserData(username: String, note: NoteCreate): Int {
+    override suspend fun createUserNote(username: String, note: Note): Int {
         TODO("Not yet implemented")
     }
-    override suspend fun getUserData(username: String): List<Note> {
+    override suspend fun getUserNote(username: String): List<Note> {
         TODO("Not yet implemented")
     }
     override suspend fun getUserDataWithId(noteId: Int): Note {
@@ -40,7 +38,7 @@ class fakeUserRepository : UserRepository {
     override suspend fun getUserDataWithLastUpdated(username: String): String {
         TODO("Not yet implemented")
     }
-    override suspend fun updateUserData(note: NoteUpdate) {
+    override suspend fun updateUserData(note: Note) {
         TODO("Not yet implemented")
     }
     override suspend fun deleteUserData(noteId: Int, username: String) {

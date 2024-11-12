@@ -1,6 +1,6 @@
 package com.example.routes
 
-import com.example.model.NoteCreate
+import com.example.model.Note
 import com.example.model.NoteUpdate
 import com.example.repository.UserRepository
 import io.ktor.http.*
@@ -16,11 +16,11 @@ fun Route.protectedRoutes(
 ) {
     authenticate("auth-jwt") {
         post("/notes/new") {
-            val notes = call.receive<NoteCreate>()
+            val notes = call.receive<Note>()
             val principal = call.principal<JWTPrincipal>()
             val username = principal!!.payload.getClaim("username").asString()
             try {
-              val noteId =   userRepository.saveUserData(username,notes)
+              val noteId =   userRepository.createUserNote(username,notes)
                 call.respond(HttpStatusCode.OK , mapOf("noteId" to noteId))
 
             } catch (e : Exception){
@@ -29,7 +29,7 @@ fun Route.protectedRoutes(
         }
 
         patch("/notes/update") {
-            val note = call.receive<NoteUpdate>()
+            val note = call.receive<Note>()
             try {
                 userRepository.updateUserData(note)
             } catch (e: NullPointerException) {
@@ -44,7 +44,7 @@ fun Route.protectedRoutes(
             val principal = call.principal<JWTPrincipal>()
             val username = principal!!.payload.getClaim("username").asString()
             try {
-               val notes =  userRepository.getUserData(username)
+               val notes =  userRepository.getUserNote(username)
                 call.respond(notes)
             } catch (e : NotFoundException){
                 call.respond(HttpStatusCode.NotFound , "${e.message}")
